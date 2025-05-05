@@ -291,7 +291,8 @@ autocmd BufEnter *.dan {
         call ParseDanModeline(23)
         call ParseDanModeline(24)
         call ParseDanModeline(25)
-        source /home/fakuve/dotfiles/common/.vim/syntax/dan.vim 
+        runtime syntax/dan.vim
+#        source /home/fakuve/dotfiles/common/.vim/syntax/dan.vim 
     endif
 }
 
