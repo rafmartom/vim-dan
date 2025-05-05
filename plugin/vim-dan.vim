@@ -11,4 +11,4 @@ if exists("g:loaded_vim_dan")
     finish
 endif
 
-let g:loaded_vim_dan= 1
+let g:loaded_vim_dan = 1
