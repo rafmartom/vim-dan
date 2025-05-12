@@ -24,7 +24,6 @@ Note that when there is only one link in a line, just placing the cursor anywher
 You can highlight lines you consider important by pressing `Ctrl + p`, meaning this will append a `(X)` at the end of the line, and by pressing `<F5>` vim will open a `Location List` with all those lines in a document, in this Location List you can just see all the lines you have highlighted, and placing the cursor on top of any of the lines you will be able to by pressing `<Enter>` to go to that specific line within the Document. 
 
 
-
 ## Installing plugin
 
 Use any of your vim Plugin manager, in my case I use `vundle` so I add the following directive to my `.vimrc`
@@ -51,6 +50,10 @@ wget https://raw.githubusercontent.com/rafmartom/vim-dan-generator/main/ready-do
 wget https://raw.githubusercontent.com/rafmartom/vim-dan-generator/main/ready-docus/.tagsmdn-css
 ```
 
+
+## Usage Note
+
+Try not to change the document, as introducing new lines will break the .tags file, it would need to be re-process and although thats possible that takes a while, so the document shouldn't be modified unless by appending highlight strings for the lines `(X)`.
 
 
 ## Missing an important documentation/feature?
