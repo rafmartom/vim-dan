@@ -2,6 +2,7 @@
 
 A vimhelp way for offline viewing of any documentation available on the Web
 
+DAN stands from Documents And Notes
 
 ## Example
 
