@@ -106,6 +106,8 @@ hi def link danListMarker Statement
 set tabstop=2
 set shiftwidth=2
 set expandtab
+
+hi ColorColumn ctermbg=236
 " ---------------------------------------------------------
 " EOF EOF EOF EOF BASIC DAN SYNTAX ITEMS
 
