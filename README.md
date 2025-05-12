@@ -2,7 +2,16 @@
 
 A vimhelp way for offline viewing of any documentation available on the Web
 
+
 ## Example
+
+![vim-dan-demo svg](./assets/vim-dan-demo.svg)
+
+Note: Links stand out more than in the previous svg rendering. See the Asciinema below
+
+[vim-dan-demo asciinema](https://asciinema.org/a/eTA3diK9MmcbKqyJHy6HWNOkF)
+
+## Explanation 
 
 `.dan` Documentations, have an interactive TOC a the Top that lets you navigate to each article (pressing `Ctrl + ]` ), may this be a **language feature** , a **method** , a **class** , a **tutorial page** etc... . They correspond to a different page on the Source Website.
 You can see that there is a link there because is highlighted, the TOC is displayed hierarchicaly.
@@ -12,7 +21,6 @@ Within the topics you may find other highlighted words, that may address to othe
 Note that when there is only one link in a line, just placing the cursor anywhere within the line pressing `Ctrl + ]` will take you to the target of that link, instead if there are many links, you need to place the cursor on top of the keyword then trigger the `Ctrl + ]`.
 
 You can highlight lines you consider important by pressing `Ctrl + p`, meaning this will append a `(X)` at the end of the line, and by pressing `<F5>` vim will open a `Location List` with all those lines in a document, in this Location List you can just see all the lines you have highlighted, and placing the cursor on top of any of the lines you will be able to by pressing `<Enter>` to go to that specific line within the Document. 
-
 
 
 
