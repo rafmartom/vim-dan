@@ -21,17 +21,17 @@ if has("conceal")
 endif
 
 " Link Source
-syn region danLinkSource start="<L=[[:alnum:]#]\+>" end="</L>" contains=danLinkSourceOTag,danLinkSourceCTag oneline keepend
+syn region danLinkSource start="<L=[[:alnum:]]\+#\?[[:alnum:]]*>" end="</L>" contains=danLinkSourceOTag,danLinkSourceCTag oneline keepend
 
 hi def link danLinkSource ColorColumn
 
 
-syn match danLinkSourceOTag contained "<L=[[:alnum:]#]\+>" conceal
+syn match danLinkSourceOTag contained "<L=[[:alnum:]]\+#\?[[:alnum:]]*>" conceal
 syn match danLinkSourceCTag contained "</L>" conceal
 
 
 " Block Link Target
-syn region danBlockLinkTarget start="<B=[[:alnum:]]\+>" end="$" contains=danBlockLinkTargetTag oneline keepend
+syn region danBlockLinkTarget start="<B=[[:alnum:]]\+>" end="$" contains=danBlockLinkTargetTag,danX oneline keepend
 
 hi def link danBlockLinkTarget String
 
@@ -40,9 +40,9 @@ syn match danBlockLinkTargetTag contained "<B=[[:alnum:]]\+>" conceal
 
 " Inline Link Target
 
-syn region danInlineLinkTarget start="<I=[[:alnum:]]\+>" end="$" contains=danInlineLinkTargetTag oneline keepend
+"syn region danInlineLinkTarget start="<I=[[:alnum:]]\+#\?[[:alnum:]]*>" end="$" contains=danInlineLinkTargetTag,danX oneline keepend
 
-syn match danInlineLinkTargetTag contained "<I=[[:alnum:]]\+>" conceal
+syn match danInlineLinkTargetTag "<I=[[:alnum:]]\+#\?[[:alnum:]]*>" conceal
 
 
 
@@ -92,8 +92,8 @@ syn match danX "(X)"
 hi def link danX StatusLineTerm
 
 " Method links
-syn match danProperty "[A-Za-z][A-Za-z0-9\_\$]*\.[A-Za-z][A-Za-z0-9\_\$]*\(\s\|\n\|#\)" contains=danX,danLinktoHash
-syn match danMethod "[A-Za-z][A-Za-z0-9\_\$]*\.[A-Za-z][A-Za-z0-9\_\$]*(.*)#\{,1}" contains=danX,danLinktoHash
+syn match danProperty "[A-Za-z][A-Za-z0-9\_\$]*\.[A-Za-z][A-Za-z0-9\_\$]*\(\s\|\n\|#\)\s"
+syn match danMethod "[A-Za-z][A-Za-z0-9\_\$]*\.[A-Za-z][A-Za-z0-9\_\$]*(.*)#\{,1}\s"
 hi def link danMethodLink	Identifier
 hi def link danMethod Identifier
 hi def link danProperty Statement
@@ -106,8 +106,6 @@ hi def link danListMarker Statement
 set tabstop=2
 set shiftwidth=2
 set expandtab
-
-hi ColorColumn ctermbg=236
 " ---------------------------------------------------------
 " EOF EOF EOF EOF BASIC DAN SYNTAX ITEMS
 

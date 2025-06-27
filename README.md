@@ -46,7 +46,7 @@ You can also search for a substring of the URL you are looking for such as `repo
 Then you can
 
 ```
-wget https://raw.githubusercontent.com/rafmartom/vim-dan-generator/main/ready-docus/mdn-css.dan
+wget -qO- https://raw.githubusercontent.com/rafmartom/vim-dan-generator/main/ready-docus/mdn-css.dan.xz | xz -dc > mdn-css.dan
 wget https://raw.githubusercontent.com/rafmartom/vim-dan-generator/main/ready-docus/.tagsmdn-css
 ```
 

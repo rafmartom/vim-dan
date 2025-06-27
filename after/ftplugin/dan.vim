@@ -32,7 +32,6 @@ command! IsLineLinkSource call IsLineLinkSourceFn()
 nnoremap <expr> <C-]>  IsLineLinkSourceFn() ? ':GotoLinkTarget<CR>' :  '<C-]>'
 
 
-
 def IsLineLinkSourceFn(): number
     # if there is a $linkfrom& in the current line
     if match(getline('.'), '<L=[[:alnum:]#]\+>.*</L>') != -1
@@ -145,8 +144,9 @@ nnoremap <C-p> :normal $a (X)<Esc>
 noremap <F4> :ToggleXConceal<CR>
 
 # Starting with new system no need to UpdateTags anytime Refreshloclist
-#noremap <F5> :call dan#Refreshloclist()<CR>:call dan#UpdateTags()<CR>:redraw!<CR>:silent! tag<CR>
-noremap <F5> :call dan#Refreshloclist()<CR>
+#noremap <F5> :call dan#Refreshloclist()<CR>
+nnoremap <silent> <F5> :silent call dan#Refreshloclist()<CR>
+
 
 command! ToggleXConceal call dan#ToggleXConceal(g:xConceal)
 
