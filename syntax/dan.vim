@@ -36,18 +36,16 @@ syn region danBlockLinkTarget start="<B=[[:alnum:]]\+>" end="$" contains=danBloc
 hi def link danBlockLinkTarget String
 
 syn match danBlockLinkTargetTag contained "<B=[[:alnum:]]\+>" conceal
+syn match danBlockLinkTargetCTag "<\/B>" conceal
 
 
 " Inline Link Target
+syn region danInlineLinkTarget start="<I=[[:alnum:]]\+#\?[[:alnum:]]*>" end="<\/I>\|$" contains=danInlineLinkTargetTag,danInlineLinkTargetCTag,danX oneline keepend
 
-"syn region danInlineLinkTarget start="<I=[[:alnum:]]\+#\?[[:alnum:]]*>" end="$" contains=danInlineLinkTargetTag,danX oneline keepend
+hi def link danInlineLinkTarget NonText
 
-syn match danInlineLinkTargetTag "<I=[[:alnum:]]\+#\?[[:alnum:]]*>" conceal
-
-
-
-
-
+syn match danInlineLinkTargetTag contained "<I=[[:alnum:]]\+#\?[[:alnum:]]*>" conceal
+syn match danInlineLinkTargetCTag contained "<\/I>" conceal
 
 
 " Links from
