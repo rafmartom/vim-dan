@@ -48,6 +48,10 @@ syn match danInlineLinkTargetTag contained "<I=[[:alnum:]]\+#\?[[:alnum:]]*>" co
 syn match danInlineLinkTargetCTag contained "<\/I>" conceal
 
 
+" Article Toc (vim-dan-notes)
+syn match danArticleTocTag "<T>" conceal
+
+
 " Links from
 syn region danLinkfromEntry start="&" end="&" contains=danLinkfromAmper,danLinkFromParentName oneline keepend
 
