@@ -1,4 +1,5 @@
 vim9script
+import autoload 'dan.vim'
 # Author: freddieventura
 # File related to vim-dan linking rules
 # so in files with the extension .dan
@@ -154,146 +155,128 @@ command! ToggleXConceal call dan#ToggleXConceal(g:xConceal)
 set nofoldenable
 set nomodeline
 
-# Giving a linenumber parse the variable and its content
-#  ie : &@ g:dan_lang_list = "javascriptreat,cpp" @&
-#  ie : &@ g:dan_other_var = "something" @&
+
+
+
 # -----------------------------------------------
-export def ParseDanModeline(lineNumber: number): void
-
-    ## First, parse the content of the line into a list,
-    ##   Its first member is the varName
-    ##      keyValueList[0] = varName
-    ##   Its second member is the list of values
-    ##      keyValueList[1] = varContent
-    var keyValueList = ParseDanModelineContent(lineNumber)
-
-
-    ## Check if the varName already exists
-    if (has_key(g:dynamicLookupDict, keyValueList[0]))
-        ## If so append its varContent to the existing one
-        ## (check not to overwrite existing keys)
-        var updatedContent = g:dynamicLookupDict[keyValueList[0]] + keyValueList[1]
-
-        ## Assign the existing variable to the concatenation of the varContent
-
-            # Call the function to get the string representation of the list
-             var listLiteral = ListToListLiteral(keyValueList[1])
-        var cmd = keyValueList[0] .. ' = ' .. listLiteral
-        execute(cmd)
-
-        ## Update the g:dynamicLookupDict
-        g:dynamicLookupDict[keyValueList[0]] = DanUniq(updatedContent)
-
-
-    ## If varName doesnt already exists
-    else
-        ##append this keyValueList to the g:dynamicLookupDict
-        g:dynamicLookupDict[keyValueList[0]] = keyValueList[1]
-
-
-        ## And Declare the Variable from scratch
-        var listLiteral = ListToListLiteral(keyValueList[1])
-        var cmd = keyValueList[0] .. ' = ' .. listLiteral
-        execute(cmd)
+# Parse variable and content from YAML-like block between <B=0> and </B>
+# -----------------------------------------------
+export def ParseDanModeline(): void
+    # Find the boundaries of the YAML block
+    var startLine = search('<B=0>', 'n')
+    var endLine = search('</B>', 'n')
+    if startLine == 0 || endLine == 0 || startLine >= endLine
+        return
     endif
 
-    ## Adding the FileName to the danFileSourced list
+    # Parse each line in the block
+    var keyValueList: list<any>
+    for lineNr in range(startLine + 1, endLine - 1)
+        keyValueList = ParseDanModelineContent(lineNr)
+        if empty(keyValueList)
+            continue
+        endif
+
+        # Check if the varName already exists
+        if has_key(g:dynamicLookupDict, keyValueList[0])
+            # Append to existing content, ensuring uniqueness
+            var updatedContent = g:dynamicLookupDict[keyValueList[0]] + keyValueList[1]
+            g:dynamicLookupDict[keyValueList[0]] = DanUniq(updatedContent)
+            var listLiteral = ListToListLiteral(g:dynamicLookupDict[keyValueList[0]])
+            var cmd = 'g:' .. keyValueList[0] .. ' = ' .. listLiteral
+            echom cmd
+            execute(cmd)
+        else
+            # Add new variable to global dictionary and namespace
+            g:dynamicLookupDict[keyValueList[0]] = keyValueList[1]
+            var listLiteral = ListToListLiteral(keyValueList[1])
+            var cmd = 'g:' .. keyValueList[0] .. ' = ' .. listLiteral
+            echom cmd
+            execute(cmd)
+        endif
+    endfor
+
+    # Add current filename to sourced list
     var currentFileName = expand('%')
     g:danFilesSourced += [currentFileName]
+    # Reload syntax file
+    runtime syntax/dan.vim
 enddef
+
 # -----------------------------------------------
-
-
+# Parse a single line of YAML-like content
+# -----------------------------------------------
 export def ParseDanModelineContent(lineNumber: number): list<any>
-# -----------------------------------------------
-    var lineContent = getline(lineNumber) 
+    var lineContent = getline(lineNumber)
+    # Skip empty lines or lines without a colon
+    if empty(lineContent) || lineContent !~ ':'
+        return []
+    endif
 
-    # Parsing the modeline variable name and value
-    # Trimming the ends
-    lineContent = substitute(lineContent, '^&@ ', '', '') 
-    lineContent = substitute(lineContent, ' @&$', '', '') 
+    # Split on the first colon to separate key and value
+    var parts = split(lineContent, ':', 1)
+    if len(parts) < 2
+        return []
+    endif
 
-    var varName = matchstr(lineContent, '.*\( =\)\@=')
+    var varName = trim(parts[0])
+    var valueStr = trim(parts[1])
 
-    # Substracting that match to get the value
-    lineContent = substitute(lineContent, '.*\( =\)\@=', '', '') 
+    # Handle different value formats
+    var varValueList: list<string>
+    if valueStr =~ '^\[.*\]$'
+        # List format, e.g., ["sh", "javascript"]
+        valueStr = substitute(valueStr, '^\[\(.*\)\]$', '\1', '')
+        if !empty(valueStr)
+            varValueList = map(split(valueStr, ','), 'trim(v:val, ''" '')')
+        endif
+    elseif valueStr =~ '^".*"$'
+        # Single string value
+        varValueList = [trim(valueStr, '"')]
+    else
+        # Treat as empty list or single value
+        varValueList = empty(valueStr) ? [] : [valueStr]
+    endif
 
-    # The varValueList is a list of values first get the string
-    lineContent = matchstr(lineContent, '\"\@<=.*\"\@=')
-    
-    var varValueList = split(lineContent, ",")
-
-    # See if it is a list or just a single value
-    var outputList = [ varName, varValueList]
-    return outputList
+    return [varName, varValueList]
 enddef
+
 # -----------------------------------------------
-
-
-# Define the function to convert a list to a string list literal
+# Convert a list to a Vim list literal string
 # -----------------------------------------------
 export def ListToListLiteral(inputList: list<any>): string
     var listString = '['
-
-    # Loop through each item in the list and build the string representation
     for item in inputList
-        listString = listString .. "'" .. item .. "', "
+        echom 'ITEM: ' .. string(item)
+        listString ..= "'" .. item .. "', "
     endfor
-
-    # Remove the trailing comma and space
     if len(listString) > 1
-        listString = listString[0 : len(listString) - 2]
+        listString = listString[0 : len(listString) - 3]
     endif
-
-    # Close the list with a closing bracket
-    listString = listString .. ']'
-
+    listString ..= ']'
     return listString
 enddef
+
 # -----------------------------------------------
-
-
+# Remove duplicates from a list
+# -----------------------------------------------
 export def DanUniq(inputList: list<any>): list<any>
-    # Create a dictionary to track unique values
     var uniqueDict = {}
-
-    # Populate the dictionary with the list items as keys to ensure uniqueness
     for item in inputList
         uniqueDict[item] = 1
     endfor
-
-    # Extract unique items from the dictionary as a list
     var uniqueList = keys(uniqueDict)
-
-    # Optionally sort if needed
     sort(uniqueList)
-
     return uniqueList
 enddef
 
-
-
+# -----------------------------------------------
+# Autocommand to trigger parsing on BufEnter
+# -----------------------------------------------
 autocmd BufEnter *.dan {
     var currentFileName = expand('%')
-
-    # Check if the current file is already in the list
     if index(g:danFilesSourced, currentFileName) == -1
-        call ParseDanModeline(12)
-        call ParseDanModeline(13)
-        call ParseDanModeline(14)
-        call ParseDanModeline(15)
-        call ParseDanModeline(16)
-        call ParseDanModeline(17)
-        call ParseDanModeline(18)
-        call ParseDanModeline(19)
-        call ParseDanModeline(20)
-        call ParseDanModeline(21)
-        call ParseDanModeline(22)
-        call ParseDanModeline(23)
-        call ParseDanModeline(24)
-        call ParseDanModeline(25)
-        runtime syntax/dan.vim
-#        source /home/fakuve/dotfiles/common/.vim/syntax/dan.vim 
+        call ParseDanModeline()
     endif
 }
 
