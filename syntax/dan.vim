@@ -40,7 +40,7 @@ syn match danBlockLinkTargetCTag "<\/B>" conceal
 
 
 " Inline Link Target
-syn region danInlineLinkTarget start="<I=[[:alnum:]]\+#\?[[:alnum:]]*>" end="<\/I>\|$" contains=danInlineLinkTargetTag,danInlineLinkTargetCTag,danX oneline keepend
+syn region danInlineLinkTarget start="<I=[[:alnum:]]\+#\?[[:alnum:]]*>" end="<\/I>\|$\|\(<L=\)\@=" contains=danInlineLinkTargetTag,danInlineLinkTargetCTag,danX,danLinkSourceOTag,danLinkSourceCTag oneline keepend
 
 hi def link danInlineLinkTarget NonText
 

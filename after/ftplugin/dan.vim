@@ -70,6 +70,7 @@ def GotoLinkTargetFn(): void
 
             if ( danLinkSourceMatch[1] <= mouse_position && danLinkSourceMatch[2] >= mouse_position )
                 execute "tag " .. danUIDMatch[0]
+                
             endif
         endfor
     endif

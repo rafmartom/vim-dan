@@ -15,6 +15,7 @@ set cpo&vim
 
 " Commands
 command! -nargs=1 DanHelp call dan#ShowHelp(<f-args>)
+command! -nargs=0 DanUpdateTags call dan#UpdateTags()
 
 " Autoloaded function (see autoload/dan.vim)
 " Example usage:

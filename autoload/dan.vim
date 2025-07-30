@@ -107,14 +107,27 @@ enddef
 # -----------------------------------------------
 #  We need to direct ctags to the right file within the right
 #  documentation dir
+# Example: :call dan#UpdateTags()
 export def UpdateTags()
     var ABSOLUTE_DIR = expand('%:p:h')
     var FILENAME_NOEXT = expand('%:t:r')
     var FILENAME = expand('%:t')
+    var original_cwd = getcwd()
 
-    # Equivalent to :silent! !ctags -f ${ABSOLUTE_DIR}/.tags${FILENAME_NOEXT} ${ABSOLUTE_DIR}/${FILENAME} 2>/dev/null
-    execute 'silent! !ctags -f ' .. ABSOLUTE_DIR .. '/.tags' .. FILENAME_NOEXT .. ' ' .. ABSOLUTE_DIR .. '/' .. FILENAME .. ' 2>/dev/null'
+    try
+        # Change to the directory of the current file
+        execute 'cd ' .. ABSOLUTE_DIR
 
+        # Run ctags with custom regex rules for .dan files
+        silent! execute '!ctags --tag-relative=yes -f .tags' .. FILENAME_NOEXT .. ' ' ..
+            \ FILENAME .. ' 2>/dev/null'
+
+        # Redraw the screen to avoid "Press ENTER" prompt
+        redraw!
+    finally
+        # Restore the original working directory
+        execute 'cd ' .. original_cwd
+    endtry
 enddef
 # -----------------------------------------------
 

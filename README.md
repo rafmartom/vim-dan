@@ -26,10 +26,38 @@ You can highlight lines you consider important by pressing `Ctrl + p`, meaning t
 
 ## Installing plugin
 
+
+### Dependencies
+
+
+The external dependencies you need to install them manualy
+
+```
+ctags
+```
+
+### Build
+
+
+You need to instal localy some files
+
+```
+make install
+```
+
+### Add the plugin
+
 Use any of your vim Plugin manager, in my case I use `vundle` so I add the following directive to my `.vimrc`
 
 ```
 Plugin 'rafmartom/vim-dan'
+```
+
+Or altogether
+
+
+```
+Plug 'rafmartom/vim-dan', { 'do': 'make install' }
 ```
 
 
