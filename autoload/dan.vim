@@ -147,65 +147,7 @@ export def ToggleXConceal(xConceal: number): void
 enddef
 # -----------------------------------------------
 
-# Giving a linenumber parse the variable and its content
-#  ie : &@ dan_lang_list = "javascriptreat,cpp" @&
-#  ie : &@ dan_other_var = "something" @&
-# -----------------------------------------------
-export def ParseDanModeline(lineNumber: number): list<any>
-    var lineContent = getline(lineNumber) 
 
-    # Parsing the modeline variable name and value
-    # Trimming the ends
-    lineContent = substitute(lineContent, '^&@ ', '', '') 
-    lineContent = substitute(lineContent, ' @&$', '', '') 
-
-    var varName = matchstr(lineContent, '.*\( =\)\@=')
-
-    # Substracting that match to get the value
-    lineContent = substitute(lineContent, '.*\( =\)\@=', '', '') 
-
-    # The varValueList is a list of values first get the string
-    lineContent = matchstr(lineContent, '\"\@<=.*\"\@=')
-    
-    var varValueList = split(lineContent, ",")
-
-    # See if it is a list or just a single value
-    var outputList = [ varName, varValueList]
-    return outputList
-enddef
-# -----------------------------------------------
-
-
-########export def SyntaxOff(): void
-########    execute 'source' expand('$VIMRUNTIME/syntax/nosyntax.vim')
-########enddef
-########
-########export def SyntaxOn(): void
-########    execute 'source' expand('$VIMRUNTIME/syntax/syntax.vim')
-########enddef
-########
-########
-########export def SyntaxReset(): void
-##########    syntax off
-##########    sleep 2
-##########    syntax on
-########
-###########    source $VIMRUNTIME/syntax/nosyntax.vim
-##########    sleep 2
-###########    source $VIMRUNTIME/syntax/syntax.vim
-########
-##########    execute 'source' expand('$VIMRUNTIME/syntax/nosyntax.vim')
-##########    sleep 2
-##########    execute 'source' expand('$VIMRUNTIME/syntax/syntax.vim')
-########
-########    SyntaxOff()
-########    sleep 2
-########    SyntaxOn()
-########enddef
-########
-########export def Helloworld(): void
-########    echo 'Hello World'
-########enddef
 
 def SyntaxOff(): void
   runtime syntax/nosyntax.vim

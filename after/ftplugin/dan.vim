@@ -156,6 +156,7 @@ set nofoldenable
 set nomodeline
 
 
+command! ParseDanModeline call ParseDanModeline()
 
 
 # -----------------------------------------------
@@ -184,14 +185,12 @@ export def ParseDanModeline(): void
             g:dynamicLookupDict[keyValueList[0]] = DanUniq(updatedContent)
             var listLiteral = ListToListLiteral(g:dynamicLookupDict[keyValueList[0]])
             var cmd = 'g:' .. keyValueList[0] .. ' = ' .. listLiteral
-            echom cmd
             execute(cmd)
         else
             # Add new variable to global dictionary and namespace
             g:dynamicLookupDict[keyValueList[0]] = keyValueList[1]
             var listLiteral = ListToListLiteral(keyValueList[1])
             var cmd = 'g:' .. keyValueList[0] .. ' = ' .. listLiteral
-            echom cmd
             execute(cmd)
         endif
     endfor
