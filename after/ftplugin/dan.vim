@@ -166,6 +166,8 @@ export def ParseDanModeline(): void
     # Find the boundaries of the YAML block
     var startLine = search('<B=0>', 'n')
     var endLine = search('</B>', 'n')
+
+
     if startLine == 0 || endLine == 0 || startLine >= endLine
         return
     endif
@@ -196,7 +198,7 @@ export def ParseDanModeline(): void
     endfor
 
     # Add current filename to sourced list
-    var currentFileName = expand('%')
+    var currentFileName = expand('%:p')
     g:danFilesSourced += [currentFileName]
     # Reload syntax file
     runtime syntax/dan.vim
@@ -273,7 +275,8 @@ enddef
 # Autocommand to trigger parsing on BufEnter
 # -----------------------------------------------
 autocmd BufEnter *.dan {
-    var currentFileName = expand('%')
+    var currentFileName = expand('%:p')
+
     if index(g:danFilesSourced, currentFileName) == -1
         call ParseDanModeline()
     endif
