@@ -125,7 +125,7 @@ if g:syntax_executed_no >= 1
             execute 'syn include @dan' . vimsyntax . ' syntax/' . vimsyntax . '.vim'
             
             " Unset the current syntax (if needed)
-            unlet b:current_syntax
+            "unlet b:current_syntax
 
             " Create the syntax region for the current language
             execute 'syn region ' . vimsyntax . ' start=/^```' . vimsyntax . '$/ms=e keepend end=/^```$/me=s-1 contains=@dan' . vimsyntax
