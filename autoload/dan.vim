@@ -148,6 +148,45 @@ enddef
 # -----------------------------------------------
 
 
+# Toggling highlight mark (X) in one-line
+# -----------------------------------------------
+export def ToggleXLine(): void
+    var lnum = line('.')
+    var line_content = getline('.')
+
+    if line_content =~# '\s(X)$'
+        var cleaned_line = substitute(line_content, '\s(X)$', '', '')
+        setline(lnum, cleaned_line)
+    else
+        setline(lnum, line_content .. " (X)")
+    endif
+enddef
+# -----------------------------------------------
+
+
+
+# Toggling highlight mark (X) in a multi-line selection
+# -----------------------------------------------
+export def ToggleXSel(): void
+    # 1. Get the start and end line numbers of the last visual selection
+    var start_line = line("'<")
+    var end_line = line("'>")
+
+    # 2. Iterate through every line in the selection
+    for lnum in range(start_line, end_line)
+        var line_content = getline(lnum)
+
+        if line_content =~# '\s(X)$'
+            var cleaned_line = substitute(line_content, '\s(X)$', '', '')
+            setline(lnum, cleaned_line)
+        else
+            setline(lnum, line_content .. " (X)")
+        endif
+    endfor
+enddef
+# -----------------------------------------------
+
+
 
 def SyntaxOff(): void
   runtime syntax/nosyntax.vim

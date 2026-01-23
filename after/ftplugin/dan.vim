@@ -141,7 +141,11 @@ enddef
 
 # VIM-DAN FUNCTIONALITIES
 # ----------------------------------
-nnoremap <C-p> :normal $a (X)<Esc>
+#nnoremap <C-p> :normal $a (X)<Esc>
+nnoremap <C-p> <cmd>call dan#ToggleXLine()<CR>
+vnoremap <C-p> <esc><cmd>call dan#ToggleXSel()<CR>
+command! ToggleXLine call dan#ToggleXLine()
+command! ToggleXSel call dan#ToggleXSel()
 
 noremap <F4> :ToggleXConceal<CR>
 
