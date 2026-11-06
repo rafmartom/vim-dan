@@ -1,1 +1,1 @@
-danotes/egid/parsed-mds.md filter=lfs diff=lfs merge=lfs -text linguist-generated=true
+danotes/egid/parsed-mds.md filter=lfs diff=lfs -text -merge linguist-generated=true
